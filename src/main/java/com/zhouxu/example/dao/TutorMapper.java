@@ -50,7 +50,6 @@ public interface TutorMapper {
     public int insertTutorPro(Tutor tutor);*/
 
 
-
     @Results(id = "tutorResultMap",value = {
 
             @Result(property = "tutorId", column = "TUTOR_ID", id = true),
