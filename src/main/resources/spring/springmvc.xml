@@ -1,0 +1,101 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--<context:annotation-config/>-->
+    <!--<context:component-scan base-package="com.example.zhouxu">
+    </context:component-scan>-->
+    <!--以上第一行是开启注解,第二行是扫描注解包。如果有第二行代码,
+    第一行可以省略-->
+
+    <!-- 可以扫描controller、service、
+    这里让扫描controller,指定controller的包
+    -->
+
+    <!-- 开启注解的扫描,这里写最外面的包,意思就是可以扫描所有
+    可以扫描controller,service,Repository
+    -->
+
+    <context:component-scan base-package="com.zhouxu.example.controller">
+    </context:component-scan>
+
+
+    <!--注解映射器 -->
+    <!-- <bean class="org.springframework.controller.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/> -->
+    <!--注解适配器 -->
+    <!-- <bean class="org.springframework.controller.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/> -->
+
+    <!-- 使用 mvc:annotation-driven代替上边注解映射器和注解适配器配置
+    mvc:annotation-driven默认加载很多的参数绑定方法，
+    比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边的RequestMappingHandlerMapping和RequestMappingHandlerAdapter
+    实际开发时使用mvc:annotation-driven
+     -->
+
+    <!--<mvc:annotation-driven></mvc:annotation-driven>-->
+
+
+    <!--注解适配器 -->
+
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+
+    <!--<mvc:annotation-driven conversion-service="conversionService">-->
+
+
+    <!--<mvc:message-converters>
+        <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+    </mvc:message-converters>-->
+
+
+    <!--</mvc:annotation-driven>-->
+
+
+    <!-- 视图解析器
+   解析jsp解析，默认使用jstl标签，classpath下的得有jstl的包
+
+    -->
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--<property name="prefix" value="/jsp/"/>-->
+        <!--<property name="suffix" value=".jsp"/>-->
+    </bean>
+
+
+    <!-- 自定义参数绑定 -->
+    <!-- 日期类型转换 -->
+    <!--<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        &lt;!&ndash; 转换器 &ndash;&gt;
+        <property name="converters">
+
+            &lt;!&ndash;<list></list>&ndash;&gt;
+            <set>
+                <bean class="com.example.zhouxu.converter.CustomDateConverter"/>
+            </set>
+
+        </property>
+
+
+    </bean>-->
+
+
+    <!-- 静态资源解析
+	包括 ：js、css、img、..
+	 -->
+
+    <!-- 配置资源映射 -->
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+
+    <mvc:resources location="/img/" mapping="/img/**"/>
+
+
+</beans>

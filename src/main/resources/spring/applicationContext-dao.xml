@@ -1,0 +1,119 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://mybatis.org/schema/mybatis-spring
+		http://mybatis.org/schema/mybatis-spring.xsd">
+
+
+    <!-- 加载db.properties文件中的内容，db.properties文件中key命名要有一定的特殊规则 -->
+    <context:property-placeholder location="classpath:properties/*.properties"/>
+
+
+    <!-- 数据库连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" lazy-init="false">
+
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="initialSize" value="1" />
+        <property name="maxActive" value="50" />
+        <property name="maxIdle" value="0" />
+        <property name="maxWait" value="30000" />
+
+
+        <!-- 开启Druid的监控统计功能 -->
+        <property name="filters" value="stat,wall" />
+        <property name="timeBetweenEvictionRunsMillis" value="3000" />
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <!-- mysql 不支持 poolPreparedStatements-->
+        <!--<property name="poolPreparedStatements" value="true" />-->
+
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+        
+
+    </bean>
+
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maxActive" value="30" />
+        <property name="maxIdle" value="5" />
+    </bean>-->
+
+
+
+    <!-- sqlSessionFactory -->
+    <!--<property name="mapperLocations" value="classpath:mapping/*.xml"></property>  -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+
+        <!-- 数据库连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+
+        <!-- 加载mybatis的全局配置文件 -->
+        <property name="configLocation" value="classpath:mybatis/sqlMapConfig.xml"/>
+
+        <!--手动加载mapper配置文件-->
+        <!--<property name="mapperLocations" value="classpath:mapper/*.xml"></property>-->
+
+    </bean>
+
+
+    <!-- mapper扫描器,如果没有手动加载mapper的配置文件,而是使用扫描的
+     方式去加载mapper的配置文件,必须要求mapper接口与mapper的配置文件同名,
+    并且要求mapper接口与mapper配置文件都在同一个 类路径下
+    遵循规范：将mapper.java和mapper.xml映射文件名称保持一致，且在一个目录 中-->
+
+    <!-- 配置包扫描器,扫描mapper接口生成代理对象放到spring容器中 -->
+
+    <!--相当于在mapper接口上加个@Mapper注解,可以自动注入,
+    同时扫描@Mapper的注解,使得类上的@Mapper注解生效-->
+
+    <!-- mapper批量扫描，从mapper包中扫描出mapper接口,自动创建代理对象并且在spring容器中注册
+
+      自动扫描出来的mapper的bean的id为mapper类名(首字母小写)
+    -->
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+
+        <!-- 扫描包路径,如果需要扫描多个包,中间使用半角逗号隔开 -->
+        <property name="basePackage" value="com.zhouxu.example.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+
+    <!-- 扫描所有的mapper接口的实现，让这些mapper能够自动注入；
+	base-package：指定mapper接口的包名
+	 -->
+    <!--<mybatis-spring:scan base-package="com.example.zhouxu.mapper"/>-->
+
+    <!-- <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.atguigu.mybatis.dao"></property>
+    </bean> -->
+
+
+</beans>
