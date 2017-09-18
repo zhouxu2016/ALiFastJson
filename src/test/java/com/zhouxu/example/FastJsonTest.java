@@ -455,4 +455,27 @@ public class FastJsonTest {
     }
 
 
+    @Test
+    public void testJson() {
+
+//        [{"name":"hehe","age":18},{"name":"haha","age":28}]
+
+        String name = "hehe";
+        String name2 = "haha";
+
+        Integer age = 18;
+        Integer age2 = 28;
+
+        String jsontest = "[{\"name\":\""+ name +"\",\"age\":"+ age +"},{\"name\":\""+ name2 +"\",\"age\":"+ age2 +"}]";
+
+//        "+ name +"  "+ age +"  "+ name2 +"  "+ age2 +"
+//        json字符串拼接,先写2个双引号,然后双引号里面写2个++号,然后把变量的名称写进去就OK
+        String json = "[{\"name\":\""+ name +"\",\"age\":"+ age +"},{\"name\":\""+ name2 +"\",\"age\":"+ age2 +"}]";
+
+        System.out.println(jsontest);
+        System.out.println(json);
+
+    }
+
+
 }
