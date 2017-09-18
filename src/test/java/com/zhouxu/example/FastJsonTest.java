@@ -455,6 +455,9 @@ public class FastJsonTest {
     }
 
 
+    /**
+     * json字符串拼接变量
+     */
     @Test
     public void testJson() {
 
